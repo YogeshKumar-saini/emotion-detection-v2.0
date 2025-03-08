@@ -40,4 +40,12 @@ stages:
     - models/model.pkl
     - src/model/model_evaluation.py
     metrics:
-    - reports/metrics.json
+    - reports/metrics.json:
+        cache: false
+    outs:
+    - dvclive
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step

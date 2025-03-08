@@ -2,18 +2,19 @@ import numpy as np
 import pandas as pd
 import pickle
 import json
-from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 import logging
+from dvclive import Live  # ✅ Correct import
+from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
-# logging configuration
+# Logging Configuration
 logger = logging.getLogger('model_evaluation')
-logger.setLevel('DEBUG')
+logger.setLevel(logging.DEBUG)
 
 console_handler = logging.StreamHandler()
-console_handler.setLevel('DEBUG')
+console_handler.setLevel(logging.DEBUG)
 
 file_handler = logging.FileHandler('model_evaluation_errors.log')
-file_handler.setLevel('ERROR')
+file_handler.setLevel(logging.ERROR)
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)
@@ -50,7 +51,7 @@ def load_data(file_path: str) -> pd.DataFrame:
         raise
 
 def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
-    """Evaluate the model and return the evaluation metrics."""
+    """Evaluate the model and log metrics using DVC Live."""
     try:
         y_pred = clf.predict(X_test)
         y_pred_proba = clf.predict_proba(X_test)[:, 1]
@@ -66,7 +67,13 @@ def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
             'recall': recall,
             'auc': auc
         }
-        logger.debug('Model evaluation metrics calculated')
+
+        # ✅ Correct way to log metrics in DVC Live
+        with Live("dvclive") as live:
+            for key, value in metrics_dict.items():
+                live.log_metric(key, value)  # ✅ Correct usage
+
+        logger.debug('Model evaluation metrics logged')
         return metrics_dict
     except Exception as e:
         logger.error('Error during model evaluation: %s', e)
