@@ -3,8 +3,9 @@ import pandas as pd
 import pickle
 import json
 import logging
-from dvclive import Live  # ✅ Correct import
+from dvclive import Live
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
+import mlflow
 
 # Logging Configuration
 logger = logging.getLogger('model_evaluation')
@@ -23,6 +24,7 @@ file_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
+
 def load_model(file_path: str):
     """Load the trained model from a file."""
     try:
@@ -37,6 +39,7 @@ def load_model(file_path: str):
         logger.error('Unexpected error occurred while loading the model: %s', e)
         raise
 
+
 def load_data(file_path: str) -> pd.DataFrame:
     """Load data from a CSV file."""
     try:
@@ -50,8 +53,9 @@ def load_data(file_path: str) -> pd.DataFrame:
         logger.error('Unexpected error occurred while loading the data: %s', e)
         raise
 
+
 def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
-    """Evaluate the model and log metrics using DVC Live."""
+    """Evaluate the model and log metrics using DVC Live and MLflow."""
     try:
         y_pred = clf.predict(X_test)
         y_pred_proba = clf.predict_proba(X_test)[:, 1]
@@ -68,16 +72,23 @@ def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
             'auc': auc
         }
 
-        # ✅ Correct way to log metrics in DVC Live
+        # ✅ Logging metrics in DVC Live
         with Live("dvclive") as live:
             for key, value in metrics_dict.items():
-                live.log_metric(key, value)  # ✅ Correct usage
+                live.log_metric(key, value)
 
-        logger.debug('Model evaluation metrics logged')
+        # ✅ Logging metrics in MLflow
+        if mlflow.active_run() is None:  # Prevents nested runs
+            with mlflow.start_run():
+                for key, value in metrics_dict.items():
+                    mlflow.log_metric(key, value)
+
+        logger.debug('Model evaluation metrics logged successfully')
         return metrics_dict
     except Exception as e:
         logger.error('Error during model evaluation: %s', e)
         raise
+
 
 def save_metrics(metrics: dict, file_path: str) -> None:
     """Save the evaluation metrics to a JSON file."""
@@ -89,20 +100,22 @@ def save_metrics(metrics: dict, file_path: str) -> None:
         logger.error('Error occurred while saving the metrics: %s', e)
         raise
 
+
 def main():
     try:
         clf = load_model('./models/model.pkl')
         test_data = load_data('./data/processed/test_tfidf.csv')
-        
+
         X_test = test_data.iloc[:, :-1].values
         y_test = test_data.iloc[:, -1].values
 
         metrics = evaluate_model(clf, X_test, y_test)
-        
+
         save_metrics(metrics, 'reports/metrics.json')
     except Exception as e:
         logger.error('Failed to complete the model evaluation process: %s', e)
         print(f"Error: {e}")
+
 
 if __name__ == '__main__':
     main()

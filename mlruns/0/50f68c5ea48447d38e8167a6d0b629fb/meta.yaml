@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/50f68c5ea48447d38e8167a6d0b629fb/artifacts
+end_time: 1741440892671
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 50f68c5ea48447d38e8167a6d0b629fb
+run_name: skillful-fox-624
+run_uuid: 50f68c5ea48447d38e8167a6d0b629fb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741440892649
+status: 3
+tags: []
+user_id: yogesh

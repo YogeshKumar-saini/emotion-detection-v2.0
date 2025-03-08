@@ -85,8 +85,8 @@ stages:
       size: 39811
     - path: src/model/model_evaluation.py
       hash: md5
-      md5: 4e840366daf5151bb5e027e7b52368f4
-      size: 3538
+      md5: eae7320234a4b7bf2ed2a819b1d7aa27
+      size: 3760
     outs:
     - path: dvclive
       hash: md5
