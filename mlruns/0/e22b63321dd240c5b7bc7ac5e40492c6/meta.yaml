@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/e22b63321dd240c5b7bc7ac5e40492c6/artifacts
+end_time: 1741441423312
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e22b63321dd240c5b7bc7ac5e40492c6
+run_name: efficient-cub-494
+run_uuid: e22b63321dd240c5b7bc7ac5e40492c6
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741441423283
+status: 3
+tags: []
+user_id: yogesh

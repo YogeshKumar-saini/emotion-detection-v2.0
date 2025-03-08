@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/7c725c6c7a084747b17bbd8d829cc97c/artifacts
+end_time: 1741441470717
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7c725c6c7a084747b17bbd8d829cc97c
+run_name: unique-ram-266
+run_uuid: 7c725c6c7a084747b17bbd8d829cc97c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741441470698
+status: 3
+tags: []
+user_id: yogesh

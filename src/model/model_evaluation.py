@@ -53,6 +53,7 @@ def load_data(file_path: str) -> pd.DataFrame:
         logger.error('Unexpected error occurred while loading the data: %s', e)
         raise
 
+mlflow.search_experiments("second exp")
 
 def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
     """Evaluate the model and log metrics using DVC Live and MLflow."""
@@ -79,7 +80,7 @@ def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
 
         # ✅ Logging metrics in MLflow
         if mlflow.active_run() is None:  # Prevents nested runs
-            with mlflow.start_run():
+            with mlflow.start_run( experiment_id=490410147184064791):
                 for key, value in metrics_dict.items():
                     mlflow.log_metric(key, value)
 
@@ -88,7 +89,6 @@ def evaluate_model(clf, X_test: np.ndarray, y_test: np.ndarray) -> dict:
     except Exception as e:
         logger.error('Error during model evaluation: %s', e)
         raise
-
 
 def save_metrics(metrics: dict, file_path: str) -> None:
     """Save the evaluation metrics to a JSON file."""
