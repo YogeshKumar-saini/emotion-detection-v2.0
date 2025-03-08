@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 import yaml
 import logging
 
@@ -56,7 +56,7 @@ def load_data(file_path: str) -> pd.DataFrame:
 def apply_tfidf(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: int) -> tuple:
     """Apply TfIdf to the data."""
     try:
-        vectorizer = TfidfVectorizer(max_features=max_features)
+        vectorizer = CountVectorizer(max_features=max_features)
 
         X_train = train_data['content'].values
         y_train = train_data['sentiment'].values
